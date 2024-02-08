@@ -6,7 +6,7 @@ const EmployeeModel = require('./models/Employee')
 const app = express()
 app.use(cors(
     {
-        origin: ["*"], // https://mern-user-create.vercel.app
+        origin: "*", // https://mern-user-create.vercel.app
         methods: ["POST", "GET"],
         credentials: true
     }
@@ -24,7 +24,7 @@ mongoose.connect(dbUrl, connectionParams);
 
 
 app.get("/", (req, res) => {
-    res.json("Hello");
+    return res.json("Hello");
 })
 
 app.post('/login',(req,res)=>{
