@@ -20,7 +20,7 @@ const connectionParams = {
   useUnifiedTopology: true,
 };
 
-mongoose.connect(dbUrl, connectionParams)
+mongoose.connect(dbUrl, connectionParams);
 
 
 app.get("/", (req, res) => {
