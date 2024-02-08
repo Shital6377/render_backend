@@ -1,36 +1,56 @@
-// Packages
-import express from "express";
-import cookieParser from "cookie-parser";
-import dotenv from "dotenv";
-import path from "path";
+const express = require('express')
+const mongoose = require('mongoose')
+const cors = require('cors')
+const EmployeeModel = require('./models/Employee')
 
-// Files
-import connectDB from "./config/db.js";
-import userRoutes from "./routes/userRoutes.js";
-import genreRoutes from "./routes/genreRoutes.js";
-import moviesRoutes from "./routes/moviesRoutes.js";
-import uploadRoutes from "./routes/uploadRoutes.js";
+const app = express()
+app.use(cors(
+    {
+        origin: ["http://localhost:5173"], // https://mern-user-create.vercel.app
+        methods: ["POST", "GET"],
+        credentials: true
+    }
+));
+app.use(express.json())
 
-// Configuration
-dotenv.config();
-connectDB();
+const dbUrl =  "mongodb+srv://sarmistha1:sarmistha@cluster0.npn1qmh.mongodb.net/store";
 
-const app = express();
+const connectionParams = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+};
 
-// middlewares
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+mongoose.connect(dbUrl, connectionParams)
 
-const PORT = process.env.PORT || 3000;
 
-// Routes
-app.use("/api/v1/users", userRoutes);
-app.use("/api/v1/genre", genreRoutes);
-app.use("/api/v1/movies", moviesRoutes);
-app.use("/api/v1/upload", uploadRoutes);
+app.get("/", (req, res) => {
+    res.json("Hello");
+})
 
-const __dirname = path.resolve();
-app.use("/uploads", express.static(path.join(__dirname + "/uploads")));
+app.post('/login',(req,res)=>{
+    const{email,password}=req.body;
+    EmployeeModel.findOne({email: email})
+    .then(user=>{
+        if(user){
+            if(user.password === password){
+                res.json('success')
+            }
+            else{
+                res.json('The password is incorrect')
+            }
+        } else{
+            res.json('No record existed')
+        }
+    })
+})
 
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+app.post('/register',(req,res)=>{
+    EmployeeModel.create(req.body)
+    .then(employee => res.json(employee))
+    .catch(err => res.json(err))
+})
+
+
+app.listen(3001, () => {
+    console.log("Server is Running on port", 3001)
+})
