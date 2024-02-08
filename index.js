@@ -1,17 +1,21 @@
-const express = require('express')
-const mongoose = require('mongoose')
-const cors = require('cors')
-const EmployeeModel = require('./models/Employee')
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const EmployeeModel = require('./models/Employee');
 
-const app = express()
-app.use(cors(
-    {
-        origin: "*", // https://mern-user-create.vercel.app
-        methods: ["POST", "GET"],
-        credentials: true
-    }
-));
-app.use(express.json())
+const app = express();
+
+const corsOptions = {
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    "access-control-allow-credentials": true, // access-control-allow-credentials:true
+    optionSuccessStatus: 200,
+};
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(cors(corsOptions));
 
 const dbUrl = "mongodb+srv://sarmistha1:sarmistha@cluster0.npn1qmh.mongodb.net/store";
 
@@ -21,7 +25,6 @@ const connectionParams = {
 };
 
 
-
 const connectDB = () => {
 
     mongoose.connect(dbUrl, connectionParams).then((res) => {
@@ -29,7 +32,7 @@ const connectDB = () => {
     }).catch((error) => {
         console.error(`Error: ${error.message}`);
     })
-    
+
 };
 
 connectDB();
@@ -62,6 +65,6 @@ app.post('/register', (req, res) => {
 })
 
 
-app.listen(3001, () => {
-    console.log("Server is Running on port", 3001)
+app.listen(4000, () => {
+    console.log("Server is Running on port", 4000)
 })
