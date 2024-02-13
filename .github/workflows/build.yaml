@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [20.x]
 
     steps:
       - name: Code Clone over the runner
@@ -24,8 +24,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build
+      - name: Code Build
         run: npm run build
 
-      - name: List files
+      - name: List files for test Build
         run: ls -lah
